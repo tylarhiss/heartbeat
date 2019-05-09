@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import classNames from 'classnames';
 
@@ -42,4 +42,4 @@ const ecg: React.FC<{
   </svg>
 );
 
-export default ecg;
+export default memo(ecg);
