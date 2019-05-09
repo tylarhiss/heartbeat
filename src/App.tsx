@@ -44,6 +44,7 @@ const App: React.FC = () => {
   const [shouldHeartbeat, setShouldHeartbeat] = useState(false);
   const [json, setJson] = useState(JSON.stringify(defaultConfig, null, 2));
   const [makingRequest, setMakingRequest] = useState(false);
+  const [didError, setDidError] = useState(false);
 
   const SettingsInput = (
     <>
@@ -80,7 +81,10 @@ const App: React.FC = () => {
     ) as HeartbeatConfig;
     const makeRequest = () => {
       setMakingRequest(true);
-      Put(host, token, headers).finally(() => setMakingRequest(false));
+      setDidError(false);
+      Put(host, token, headers)
+        .catch(() => setDidError(true))
+        .finally(() => setMakingRequest(false));
     };
 
     let intervalId = setInterval(() => {
@@ -106,7 +110,7 @@ const App: React.FC = () => {
         <button onClick={() => setShouldHeartbeat(b => !b)}>
           {!shouldHeartbeat ? 'Start' : 'Stop'}
         </button>
-        {shouldHeartbeat && <ECG requesting={makingRequest} />}
+        {shouldHeartbeat && <ECG requesting={makingRequest} error={didError} />}
       </header>
     </div>
   );

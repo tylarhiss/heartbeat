@@ -18,6 +18,10 @@ svg.requesting path {
   stroke: yellow;
 }
 
+svg.errored path {
+  stroke: red;
+}
+
 @keyframes pulse {
   0% {
     stroke-dashoffset: 1130;

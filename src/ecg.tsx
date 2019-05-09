@@ -1,5 +1,8 @@
 import React from 'react';
-const ecg: React.FC<{ requesting?: boolean }> = props => (
+
+import classNames from 'classnames';
+
+const ecg: React.FC<{ requesting?: boolean; error?: boolean }> = props => (
   <svg
     version="1.1"
     id="Layer_1"
@@ -8,7 +11,10 @@ const ecg: React.FC<{ requesting?: boolean }> = props => (
     x="0px"
     y="0px"
     viewBox="0 0 600 300"
-    className={props.requesting ? 'requesting' : ''}
+    className={classNames({
+      requesting: props.requesting,
+      errored: props.error
+    })}
   >
     <path
       d="
