@@ -4,7 +4,6 @@ import ECG from './ecg';
 import './ecg.scss';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { Put } from './Api';
-import { url } from 'inspector';
 
 export interface HeartbeatConfig {
   host: string;
