@@ -106,7 +106,9 @@ const App: React.FC = () => {
         <button id="controlButton" onClick={() => setShouldHeartbeat(b => !b)}>
           {!shouldHeartbeat ? 'Start' : 'Stop'}
         </button>
-        {shouldHeartbeat && <ECG requesting={makingRequest} error={didError} />}
+        {shouldHeartbeat && (
+          <ECG requesting={makingRequest} error={didError} animationTime={4} />
+        )}
       </header>
     </div>
   );

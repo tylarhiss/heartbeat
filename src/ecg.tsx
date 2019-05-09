@@ -2,7 +2,11 @@ import React from 'react';
 
 import classNames from 'classnames';
 
-const ecg: React.FC<{ requesting?: boolean; error?: boolean }> = props => (
+const ecg: React.FC<{
+  requesting?: boolean;
+  error?: boolean;
+  animationTime?: number;
+}> = props => (
   <svg
     version="1.1"
     id="Layer_1"
@@ -17,6 +21,9 @@ const ecg: React.FC<{ requesting?: boolean; error?: boolean }> = props => (
     })}
   >
     <path
+      style={{
+        animation: `pulse ${props.animationTime || 4}s infinite linear`
+      }}
       d="
          M0,151h34.1c0.2,0,0.4-0.1,0.5-0.3l1.8-5.3c0.2-0.5,0.9-0.4,1,0.1l1.1,5.9c0.1,0.5,0.9,0.5,1,0l6.4-37
 	c0.1-0.6,0.9-0.5,1,0l6.7,55c0.1,0.6,0.9,0.6,1,0l3.9-20c0.1-0.5,0.9-0.5,1,0l0.5,2.3c0.1,0.5,0.9,0.5,1,0l2.5-12.7
@@ -24,6 +31,9 @@ const ecg: React.FC<{ requesting?: boolean; error?: boolean }> = props => (
          "
     />
     <path
+      style={{
+        animation: `pulse ${props.animationTime || 4}s infinite linear`
+      }}
       d="
          M0,150h35.1c0.2,0,0.4-0.1,0.5-0.3l1.8-5.3c0.2-0.5,0.9-0.4,1,0.1l1.1,5.9c0.1,0.5,0.9,0.5,1,0l6.4-37
 	c0.1-0.6,0.9-0.5,1,0l6.7,55c0.1,0.6,0.9,0.6,1,0l3.9-20c0.1-0.5,0.9-0.5,1,0l0.5,2.3c0.1,0.5,0.9,0.5,1,0l2.5-12.7
