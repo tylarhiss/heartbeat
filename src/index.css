@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/theme/material.css';
+
+* {
+  box-sizing: border-box;
+}

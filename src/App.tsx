@@ -1,26 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import ECG from './ecg';
+import './ecg.scss';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { Put } from './Api';
+import { url } from 'inspector';
+
+export interface HeartbeatConfig {
+  host: string;
+  token: string;
+  headers: { [key: string]: string };
+  timeout: number;
+}
+
+export const defaultConfig: HeartbeatConfig = {
+  host: 'http://npsnorthcentralus.azure-api.net/sandbox/api/nsk/v1/token',
+  token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkb3RSRVpBcGkiLCJqdGkiOiI2NDNhMWYzNS1mMTE5LTJiMGUtZjQzYi0yMDY5ODYxOTAxMzIiLCJpc3MiOiJBUEkifQ.nS9W8ibfl9UJTtbNFNZJjSr5MAaCXLpo-Y1RknCd4YM',
+  headers: {
+    'Ocp-Apim-Subscription-Key': '854db94be14d4af89a8e27539e824c71',
+    'Ocp-Apim-trace': 'true',
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache'
+  },
+  timeout: 60000
+};
+
+function isJson(jsonString: string) {
+  try {
+    jsonString = JSON.parse(jsonString);
+  } catch (e) {
+    return false;
+  }
+
+  if (typeof jsonString === 'object' && jsonString !== null) {
+    return true;
+  }
+
+  return false;
+}
 
 const App: React.FC = () => {
   const [shouldHeartbeat, setShouldHeartbeat] = useState(false);
-  const [host, setHost] = useState('');
-  const [token, setToken] = useState('');
+  const [json, setJson] = useState(JSON.stringify(defaultConfig, null, 2));
+  const [makingRequest, setMakingRequest] = useState(false);
 
-  const test = (
+  const SettingsInput = (
     <>
-      <input
-        type="text"
-        name=""
-        id=""
-        value={token}
-        onChange={e => setToken(e.target.value)}
-      />
-      <input
-        type="text"
-        name=""
-        id=""
-        value={host}
-        onChange={e => setHost(e.target.value)}
+      <CodeMirror
+        value={json}
+        options={{
+          mode: 'javascript',
+          theme: 'material',
+          lineNumbers: true
+        }}
+        onBlur={e => {
+          const value = e.getValue();
+          const validJson = isJson(value);
+
+          if (!validJson) {
+            return;
+          }
+
+          setJson(JSON.stringify(JSON.parse(value), null, 2));
+        }}
+        onChange={(editor, data, value) => {}}
+        className="wut"
       />
     </>
   );
@@ -30,27 +75,38 @@ const App: React.FC = () => {
       return;
     }
 
-    let timerTimeout = setTimeout(() => {
-      console.log('test');
-    }, 60000);
+    const { token, host, headers, timeout } = JSON.parse(
+      json
+    ) as HeartbeatConfig;
+    const makeRequest = () => {
+      setMakingRequest(true);
+      Put(host, token, headers).finally(() => setMakingRequest(false));
+    };
+
+    let intervalId = setInterval(() => {
+      makeRequest();
+    }, timeout);
+
+    makeRequest();
 
     return () => {
-      if (timerTimeout) {
-        clearTimeout(timerTimeout);
+      if (intervalId) {
+        clearInterval(intervalId);
       }
     };
-  }, [shouldHeartbeat]);
+  }, [shouldHeartbeat, json]);
 
   return (
     <div className="App">
       <header className="App-header">
-        {!shouldHeartbeat && test}
+        {!shouldHeartbeat && SettingsInput}
+
+        {/* {makingRequest && 'Making request'} */}
 
         <button onClick={() => setShouldHeartbeat(b => !b)}>
           {!shouldHeartbeat ? 'Start' : 'Stop'}
         </button>
-
-        {shouldHeartbeat && <div className="heart" />}
+        {shouldHeartbeat && <ECG requesting={makingRequest} />}
       </header>
     </div>
   );
