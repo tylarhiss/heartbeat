@@ -65,7 +65,6 @@ const App: React.FC = () => {
 
           setJson(JSON.stringify(JSON.parse(value), null, 2));
         }}
-        onChange={(editor, data, value) => {}}
         className="wut"
       />
     </>
@@ -104,10 +103,7 @@ const App: React.FC = () => {
     <div className="App">
       <header className="App-header">
         {!shouldHeartbeat && SettingsInput}
-
-        {/* {makingRequest && 'Making request'} */}
-
-        <button onClick={() => setShouldHeartbeat(b => !b)}>
+        <button id="controlButton" onClick={() => setShouldHeartbeat(b => !b)}>
           {!shouldHeartbeat ? 'Start' : 'Stop'}
         </button>
         {shouldHeartbeat && <ECG requesting={makingRequest} error={didError} />}

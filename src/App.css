@@ -6,9 +6,23 @@
   align-items: center;
   /* justify-content: center; */
   color: white;
-  padding-top: 100px;
+  /* padding-top: 100px; */
+  position: relative;
+  height: 100vh;
 }
 
 .wut {
   width: 100%;
+  height: 100%;
+}
+.wut .CodeMirror {
+  height: 100%;
+}
+
+#controlButton {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  border: none;
+  padding: 1rem 2rem;
 }
